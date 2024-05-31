@@ -48,3 +48,17 @@ Route::get('contact', function () {
 Route::get('master-admin', function (){
     return view('admin.layout.master');
 });
+
+Route::get('admin/product', function (){
+    return view('admin.pages.product');
+});
+
+Route::get('admin/product-category', function (){
+    return view('admin.pages.product_category');
+});
+
+Route::get('admin/product-create', function (){
+    return view('admin.pages.product_create');
+});
+
+

@@ -20,3 +20,31 @@ Route::get('/', function () {
 Route::get('master', function (){
     return view('client.layout.master');
 });
+
+Route::get('home', function () {
+    return view('client.pages.home');
+});
+
+Route::get('product-list', function () {
+    return view('client.pages.product_list');
+});
+
+Route::get('product-detail', function () {
+    return view('client.pages.product_detail');
+});
+
+Route::get('cart', function () {
+    return view('client.pages.cart');
+});
+
+Route::get('checkout', function () {
+    return view('client.pages.checkout');
+});
+
+Route::get('contact', function () {
+    return view('client.pages.contact');
+});
+
+Route::get('master-admin', function (){
+    return view('admin.layout.master');
+});

@@ -32,6 +32,7 @@ return new class extends Migration
             $table->dropForeign('product_image_product_id_foreign');
             $table->dropColumn('product_id');
         });
+        
         Schema::dropIfExists('product_image');
     }
 };

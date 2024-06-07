@@ -26,28 +26,46 @@
         <div class="col-md-12">
         <!-- general form elements -->
         <div class="card card-primary">
+            @if (session('message'))
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-success" role="alert">
+                            {{ session('message') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
             <div class="card-header">
             <h3 class="card-title">Product Category</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form role="form" method="POST" action="http://localhost:8000/admin/product_category/store">
+            <form role="form" method="POST" action="{{ route('admin.product_category.store') }}">
             <div class="card-body">
                 <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
+                <input type="text" value="{{ old('name') }}" name="name" class="form-control" id="name" placeholder="Enter name">
+                @error('name')
+                    <span class="text-danger">{{ $message }}<span>
+                @enderror
                 </div>
                 <div class="form-group">
                 <label for="slug">Slug</label>
-                <input type="text" name="slug" class="form-control" id="slug" placeholder="Enter slug">
+                <input type="text" value="{{ old('slug') }}" name="slug" class="form-control" id="slug" placeholder="Enter slug">
+                @error('slug')
+                    <span class="text-danger">{{ $message }}<span>
+                @enderror
                 </div>
                 <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" class="form-control" id="status">
                     <option value="">---Please Select---</option>
-                    <option value="1">Show</option>
-                    <option value="0">Hide</option>
+                    <option {{ old('status') == '1' ? 'selected' : '' }} value="1">Show</option>
+                    <option {{ old('status') == '0' ? 'selected' : '' }} value="0">Hide</option>
                 </select>
+                @error('status')
+                    <span class="text-danger">{{ $message }}<span>
+                @enderror
                 </div>
             </div>
             <!-- /.card-body -->

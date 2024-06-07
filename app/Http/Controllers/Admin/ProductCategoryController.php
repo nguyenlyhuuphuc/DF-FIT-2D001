@@ -38,7 +38,23 @@ class ProductCategoryController extends Controller
     }
 
     public function index(){
-        return view('admin.pages.product_category.index');
+        // totalRecord = 17 (select count(*) as total_records from product_category;)
+        // itemPerPage =  5
+        // totalPages =  floar(17 / 5) = 4
+        // REQUEST USER page=2
+        // LIMIT 0, 5 => page 1 => (1 - 1) * itemPerPage
+        // LIMIT 5, 5 => page 2 => (2 - 1) * itemPerPage
+        // LIMIT 10, 5 => page 3 => (3 - 1) * itemPerPage
+        // LIMIT 15, 5  => page 4 =>  (4 - 1) * itemPerPage
+
+        $itemPerPage = 5;
+        $totalRecord = DB::table('product_category')->count();
+        $totalPage = (int)ceil($totalRecord / $itemPerPage);
+
+        //Query Builder
+        $datas = DB::table('product_category')->get();
+
+        return view('admin.pages.product_category.index', ['datas' => $datas, 'totalPage' => $totalPage]);
     }
 }
 

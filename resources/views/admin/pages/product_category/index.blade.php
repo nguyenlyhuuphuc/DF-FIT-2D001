@@ -30,6 +30,15 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card">
+               @if (session('message'))
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-success" role="alert">
+                            {{ session('message') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
               <div class="card-header">
                 <h3 class="card-title">Bordered Table</h3>
               </div>
@@ -52,7 +61,13 @@
                         <td>{{ $data->name }}</td>
                         <td>{{ $data->slug }}</td>
                         <td>{{ $data->status ? 'Show' : 'Hide' }}</td>
-                        <td></td>
+                        <td>
+                          <form action="{{ route('admin.product_category.destroy') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $data->id }}" />
+                            <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
+                          </form>
+                        </td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -60,13 +75,14 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                  <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                  @for($page = 1; $page <= $totalPage; $page++)
+                {{ $datas->links() }}
+                {{-- <ul class="pagination pagination-sm m-0 float-right">
+                  <li class="page-item"><a class="page-link" href="#">&laquo;</a></li> --}}
+                  {{-- @for($page = 1; $page <= $totalPage; $page++)
                     <li class="page-item"><a class="page-link" href="?page={{ $page }}">{{ $page }}</a></li>
-                  @endfor
-                  <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
+                  @endfor --}}
+                  {{-- <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                </ul> --}}
               </div>
             </div>
             <!-- /.card -->

@@ -85,3 +85,26 @@
 <!-- /.content -->
   </div>
 @endsection
+
+
+@section('my-script')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#name').on('keyup', function(){
+            var name = $(this).val();
+
+            $.ajax({
+                method: 'POST', //method of form
+                url : "{{ route('admin.product_category.slug') }}", //action of form
+                data: {
+                    slug: name,
+                    _token: '{{ csrf_token() }}'
+                }, //input name
+                success: function (res){
+                    $('#slug').val(res.slug);
+                }
+            });
+        });
+    });
+</script>
+@endsection

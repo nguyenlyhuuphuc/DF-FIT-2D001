@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductCategoryStoreRequest;
+use App\Http\Requests\ProductCategoryUpdateRequest;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,29 +16,16 @@ class ProductCategoryController extends Controller
         return view('admin.pages.product_category.create');
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'name' => 'required|min:3|max:255',
-            'slug' => 'required',
-            'status' => 'required',
-        ],[
-            'name.required' => 'Ten buoc phai nhap!',
-            'name.min' => 'Ten it nhat phai co 3 ky tu',
-            'name.max' => 'Ten nhieu nhat phai chi co 255 ky tu', 
-        ]);
-
-        //Fresh data
+    public function store(ProductCategoryStoreRequest $request){
         $result = DB::table('product_category')->insert([
             'name' => $request->name,
             'slug' => $request->slug,
             'status' => $request->status
         ]);
 
-        if($result){
-            return redirect()->route('admin.product_category.index')->with('message', 'Tao danh muc thanh cong');
-        }else{
-            dd('that bai');
-        }
+        $message = $result ? 'Tao danh muc thanh cong' : 'tao danh muc that bai';
+
+        return redirect()->route('admin.product_category.index')->with('message', $message);
     }
 
     public function index(Request $request){
@@ -57,7 +46,13 @@ class ProductCategoryController extends Controller
 
         //Query Builder
         // $datas = DB::table('product_category')->offset($offset)->limit($itemPerPage)->get();
-        $datas = DB::table('product_category')->paginate(config('myconfig.my_item_per_page'));
+        // $datas = DB::table('product_category')
+        // ->where('deleted_at', NULL)
+        // ->paginate(config('myconfig.my_item_per_page'));
+
+        //Eloquent 
+        $datas = ProductCategory::withTrashed()->paginate(config('myconfig.my_item_per_page'));
+
 
         return view('admin.pages.product_category.index', ['datas' => $datas]);
     }
@@ -68,16 +63,46 @@ class ProductCategoryController extends Controller
         return response()->json(['slug' => $slug]);
     }
 
-    public function destroy(Request $request){
-        $id = $request->id;
-
-        //Query Builder
-        // $result = DB::table('product_category')->where('id', $id)->delete();
-        //Eloquent - ORM
-        $result = ProductCategory::find($id)->delete();
-
+    public function destroy(Request $request, ProductCategory $productCategory){
+        $result = $productCategory->delete();
         //Flash message
         $message = $result ? 'Xoa danh muc thanh cong' : 'Xoa danh muc that bai';
+        return redirect()->route('admin.product_category.index')->with('message', $message);
+    }
+
+    public function restore(Request $request, int $id){
+        $id = $request->id;
+        //Eloquent
+        ProductCategory::withTrashed()->find($id)->restore();
+
+        return redirect()->route('admin.product_category.index')->with('message', 'Khoi phuc thanh cong');
+    }
+
+    public function detail(Request $request, ProductCategory $productCategory){
+        return view('admin.pages.product_category.detail', ['data' => $productCategory]);
+    }
+
+    public function update(ProductCategoryUpdateRequest $request, int $id){
+        //Eloquent Update
+        $productCategory = ProductCategory::find($id);
+
+        //mass assignment
+        $result = $productCategory->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'status' => $request->status
+        ]);
+        
+        //Query Builder        
+        // $result = DB::table('product_category')->where('id', $id)
+        // ->update([
+        //     'name' => $request->name,
+        //     'slug' => $request->slug,
+        //     'status' => $request->status
+        // ]);
+
+        $message = $result ? 'Cap nhat danh muc thanh cong' : 'Cap nhat danh muc that bai';
+
         return redirect()->route('admin.product_category.index')->with('message', $message);
     }
 }

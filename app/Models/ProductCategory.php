@@ -11,4 +11,12 @@ class ProductCategory extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'product_category';
+
+    // protected $fillable = [
+    //     'name',
+    //     // 'slug',
+    //     'status'
+    // ];
+
+    protected $guarded = [];
 }

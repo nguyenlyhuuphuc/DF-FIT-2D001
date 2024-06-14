@@ -6,6 +6,10 @@
     <title>AdminLTE 3 | Dashboard</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <link
+      rel="stylesheet"
+      href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"
+    />
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -113,6 +117,7 @@
     <script src="{{ asset('asset/admin/dist/js/pages/dashboard.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('asset/admin/dist/js/demo.js') }}"></script>
+     <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     @yield('my-script')
   </body>
 </html>

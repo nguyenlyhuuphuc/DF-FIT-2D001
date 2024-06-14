@@ -29,30 +29,25 @@ class ProductCategoryController extends Controller
     }
 
     public function index(Request $request){
-        // totalRecord = 17 (select count(*) as total_records from product_category;)
-        // itemPerPage =  5
-        // totalPages =  floar(17 / 5) = 4
-        // REQUEST USER page=2
-        // LIMIT 0, 5 => page 1 => (1 - 1) * itemPerPage
-        // LIMIT 5, 5 => page 2 => (2 - 1) * itemPerPage
-        // LIMIT 10, 5 => page 3 => (3 - 1) * itemPerPage
-        // LIMIT 15, 5  => page 4 =>  (4 - 1) * itemPerPage
-        // $page = $request->page ?? 1;
+        // $key = $request->key ?? null;
+        // $sortBy = $request->sortBy ?? 'latest';
+        // //SELECT * FROM `product_category` WHERE name like '%DVM%' OR slug like '%DVM%';
+        // //SELECT * FROM product_category ORDER BY created_at DESC;
 
-        // $itemPerPage = config('myconfig.my_item_per_page');
-        // $totalRecord = DB::table('product_category')->count();
-        // $totalPage = (int)ceil($totalRecord / $itemPerPage);
-        // $offset = ($page - 1) * $itemPerPage;
+        // //Eloquent 
+        // if(is_null($key)){
+        //     $datas = ProductCategory::withTrashed();
+        // }else{
+        //     $datas = ProductCategory::withTrashed()
+        //     ->where('name', 'like' ,"%$key%")
+        //     ->orWhere('slug', 'like' ,"%$key%");
+        // }
 
-        //Query Builder
-        // $datas = DB::table('product_category')->offset($offset)->limit($itemPerPage)->get();
-        // $datas = DB::table('product_category')
-        // ->where('deleted_at', NULL)
-        // ->paginate(config('myconfig.my_item_per_page'));
+        // $datas->orderBy('created_at', $sortBy === 'latest' ? 'desc' : 'asc');
 
-        //Eloquent 
-        $datas = ProductCategory::withTrashed()->paginate(config('myconfig.my_item_per_page'));
-
+        // $datas = $datas->paginate(config('myconfig.my_item_per_page'));
+        
+        $datas = ProductCategory::withTrashed()->get();
 
         return view('admin.pages.product_category.index', ['datas' => $datas]);
     }

@@ -41,16 +41,21 @@
             @endif
               <div class="card-header">
                 <h3 class="card-title">Bordered Table</h3>
-                <form role="form" action="" method="">
+                <form role="form" action="{{ route('admin.product_category.index') }}" method="GET">
                   <div class="form-group">
-                      <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
+                      <input type="text" value="{{ request()->key ?? '' }}" name="key" class="form-control" id="name" placeholder="Enter name">
+                       <select name="sortBy" class="form-control">
+                        <option value="">---Please Select---</option>
+                        <option {{ request()->sortBy === 'oldest' ? 'selected' : '' }} value="oldest">Oldest</option>
+                        <option {{ request()->sortBy === 'latest' ? 'selected' : '' }} value="latest">Latest</option>
+                      </select>
                       <button class="btn btn-primary" type="submit">Search</button>
                   </div>
                 </form>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table class="table table-bordered">
+                <table id="tableProductCategory" class="table table-bordered">
                   <thead>                  
                     <tr>
                       <th style="width: 10px">#</th>
@@ -88,7 +93,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-                {{ $datas->links() }}
+                {{-- {{ $datas->withQueryString()->links() }} --}}
                 {{-- <ul class="pagination pagination-sm m-0 float-right">
                   <li class="page-item"><a class="page-link" href="#">&laquo;</a></li> --}}
                   {{-- @for($page = 1; $page <= $totalPage; $page++)
@@ -105,4 +110,12 @@
     </section>
         <!-- /.content -->
       </div>
+@endsection
+
+@section('my-script')
+  <script type="text/javascript">
+    $(document).ready(function(){
+        let table = new DataTable('#tableProductCategory');
+    });
+  </script>
 @endsection

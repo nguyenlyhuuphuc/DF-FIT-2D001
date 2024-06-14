@@ -2,29 +2,34 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\ProductController;
 
+Route::prefix('admin/product_category')
+->name('admin.product_category.')
+->controller(ProductCategoryController::class)
+->middleware('check.user.admin')
+->group(function(){
+    Route::get('create', 'create')->name('create');
+    Route::post('store',  'store')->name('store');
+    Route::get('/', 'index')->name('index');
+    Route::post('slug',  'makeSlug')->name('slug');
+    Route::post('destroy/{productCategory}', 'destroy')->name('destroy');
+    Route::post('restore/{id}',  'restore')->name('restore');
+    Route::get('detail/{productCategory}', 'detail')->name('detail');
+    Route::post('update/{productCategory}','update')->name('update');
+});
 
-Route::get('admin/product_category/create', [ProductCategoryController::class, 'create'])
-->name('admin.product_category.create');
+Route::name('admin')->resource('admin/product', ProductController::class);
 
-Route::post('admin/product_category/store', [ProductCategoryController::class, 'store'])
-->name('admin.product_category.store');
+Route::get('product/pepsi', function (){
+    echo '<h1>pepsi</h1>';
+})->middleware('check.user.login');
 
-Route::get('admin/product_category', [ProductCategoryController::class, 'index'])
-->name('admin.product_category.index');
+Route::get('product/hennessy', function (){
+    echo '<h1>hennessy</h1>';
+})->middleware('check.user.login.and.adult');
 
-Route::post('admin/product_category/slug', [ProductCategoryController::class, 'makeSlug'])
-->name('admin.product_category.slug');
-
-Route::post('admin/product_category/destroy/{productCategory}', [ProductCategoryController::class, 'destroy'])
-->name('admin.product_category.destroy');
-
-Route::post('admin/product_category/restore/{id}', [ProductCategoryController::class, 'restore'])
-->name('admin.product_category.restore');
-
-Route::get('admin/product_category/detail/{productCategory}', [ProductCategoryController::class, 'detail'])
-->name('admin.product_category.detail');
-
-Route::post('admin/product_category/update/{productCategory}', [ProductCategoryController::class, 'update'])
-->name('admin.product_category.update');
+Route::get('product/lavie', function (){
+    echo '<h1>lavie</h1>';
+});
 ?>

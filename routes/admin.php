@@ -19,7 +19,7 @@ Route::prefix('admin/product_category')
     Route::post('update/{productCategory}','update')->name('update');
 });
 
-Route::name('admin')->resource('admin/product', ProductController::class);
+Route::name('admin')->resource('admin/product', ProductController::class)->middleware('check.user.admin');
 
 Route::get('product/pepsi', function (){
     echo '<h1>pepsi</h1>';

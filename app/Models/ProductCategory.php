@@ -12,11 +12,9 @@ class ProductCategory extends Model
 
     protected $table = 'product_category';
 
-    // protected $fillable = [
-    //     'name',
-    //     // 'slug',
-    //     'status'
-    // ];
-
     protected $guarded = [];
+
+    public function products(){
+        return $this->hasMany(Product::class, 'product_category_id')->withTrashed();
+    }
 }

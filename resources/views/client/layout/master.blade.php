@@ -112,7 +112,7 @@
     <script src="{{ asset('asset/client/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('asset/client/js/main.js') }}"></script>
 
-
+    @yield('myscript')
 
 </body>
 

@@ -30,8 +30,6 @@ class ProductController extends Controller
         // ->selectRaw('product_category.name as product_category_name')
         // ->paginate(config('myconfig.my_item_per_page'));
 
-
-
         // dd($datas);
         $datas = Product::with('productCategory')->paginate(config('myconfig.my_item_per_page'));
         return view('admin.pages.product.index', ['datas' => $datas]);
@@ -135,8 +133,11 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
+        $result = $product->delete();
+        //Flash message
+        $message = $result ? 'Xoa san pham thanh cong' : 'Xoa san pham that bai';
+        return redirect()->route('admin.product.index')->with('message', $message);
     }
 }

@@ -27,10 +27,21 @@ class CartController extends Controller
             'price' => $product->price
         ];
 
+        $totalProducts = count($cart);
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalItem = $item['price'] * $item['qty'];
+            $totalPrice += $totalItem;
+        }
+
         //Save in Session
         session()->put('cart', $cart);
 
-        return response()->json(['message' => 'Them vao gio hang thanh cong']);
+        return response()->json([
+            'message' => 'Them vao gio hang thanh cong',
+            'totalProducts' => $totalProducts,
+            'totalPrice' => number_format($totalPrice, 2)
+        ]);
     }
 
     public function destroy(){

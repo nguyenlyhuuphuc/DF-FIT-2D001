@@ -390,6 +390,9 @@
                     productId: productId
                 },
                 success: function(response){
+                    $('.fa-shopping-bag').siblings('span').html(response.totalProducts);
+                    $('.header__cart__price').children('span').html(response.totalPrice);
+
                     Swal.fire({
                         title: response.message,
                         icon: "success"

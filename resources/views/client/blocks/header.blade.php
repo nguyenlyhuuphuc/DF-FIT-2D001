@@ -64,9 +64,20 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            @php 
+                                $totalProductInCart = count(session()->get('cart', []));
+                            @endphp
+                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>{{ $totalProductInCart }}</span></a></li>
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                        @php 
+                            $cart = session()->get('cart', []);
+                            $totalPrice = 0;
+                            foreach ($cart as $item) {
+                                $totalItem = $item['price'] * $item['qty'];
+                                $totalPrice += $totalItem;
+                            }
+                        @endphp
+                        <div class="header__cart__price">item: <span>${{ number_format($totalPrice, 2) }}</span></div>
                     </div>
                 </div>
             </div>

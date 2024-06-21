@@ -390,7 +390,10 @@
                     productId: productId
                 },
                 success: function(response){
-                    alert(response.message);
+                    Swal.fire({
+                        title: response.message,
+                        icon: "success"
+                    });
                 }
             });
        });

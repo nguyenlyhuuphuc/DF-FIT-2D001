@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -36,5 +37,35 @@ class CartController extends Controller
         session()->put('cart', []);
 
         return response()->json(['message' => 'Xoa gio hang thanh cong']);
+    }
+
+    public function deleteItem(string $productId){
+       $cart = session()->get('cart', []);
+       
+        if(array_key_exists($productId, $cart)){
+            unset($cart[$productId]);
+            session()->put('cart', $cart);
+        }else{
+            throw new Exception("Khong the xoa");
+        }
+
+       return response()->json(['message' => 'Xoa san pham thanh cong']);
+    }
+
+    public function addProductItem(string $productId, int $qty){
+        $cart = session()->get('cart', []);
+
+        if(array_key_exists($productId, $cart)){
+
+            if($qty === 0){
+                 unset($cart[$productId]);
+            }else{
+                $cart[$productId]['qty'] = $qty;
+            }
+            
+            session()->put('cart', $cart);
+        }
+
+        return response()->json(['message' => 'Cap nhat san pham thanh cong']);
     }
 }

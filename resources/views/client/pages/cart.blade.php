@@ -36,8 +36,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($cart as $item)
-                                    <tr>
+                                @foreach($cart as $productId => $item)
+                                    <tr id="tr-{{ $productId }}">
                                         <td class="shoping__cart__item">
                                             <img src="img/cart/cart-1.jpg" alt="">
                                             <h5>{{ $item['name'] }}</h5>
@@ -47,7 +47,9 @@
                                         </td>
                                         <td class="shoping__cart__quantity">
                                             <div class="quantity">
-                                                <div class="pro-qty">
+                                                <div 
+                                                data-product-id="{{ $productId }}"
+                                                data-url-add-product="{{ route('cart.add.product.item', ['productId' => $productId]) }}" class="pro-qty">
                                                     <input type="text" value="{{ $item['qty'] }}">
                                                 </div>
                                             </div>
@@ -55,7 +57,9 @@
                                         <td class="shoping__cart__total">
                                             ${{ number_format($item['price'] * $item['qty'], 2) }}
                                         </td>
-                                        <td class="shoping__cart__item__close">
+                                        <td
+                                        data-url-delete="{{ route('cart.delete.item', ['productId' => $productId]) }}" 
+                                        data-product-id="{{ $productId }}" class="shoping__cart__item__close">
                                             <span class="icon_close"></span>
                                         </td>
                                     </tr>
@@ -104,6 +108,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
        $('.btn-delete-cart').on('click', function(event){
+            event.preventDefault();
             $.ajax({
                 type: 'GET',
                 url: "{{ route('cart.destroy') }}",
@@ -112,6 +117,53 @@
                     alert(response.message);
                 }
             })
+       });
+
+       $('.shoping__cart__item__close').on('click', function (){
+            var productId = $(this).data('product-id');
+            var url = $(this).data('url-delete');
+            
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (response){
+                    $('#tr-'+productId).empty();
+                    Swal.fire({
+                        title: response.message,
+                        icon: "success"
+                    });
+                }
+            });
+       });
+
+       $('.qtybtn').on('click', function(){
+            var btn = $(this);
+
+            var qty = parseInt(btn.siblings('input').val());
+
+            if(btn.hasClass('inc')){
+                qty += 1;
+            }else if(btn.hasClass('dec')){
+                qty -= 1;
+            }
+
+            var url = btn.parent().data('url-add-product');
+            url += "/"+qty;
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (response) {
+                    var productId = btn.parent().data('product-id');
+                    if(qty === 0){
+                         $('#tr-'+productId).empty();
+                    }
+                    Swal.fire({
+                        title: response.message,
+                        icon: "success"
+                    });
+                }
+            });
        });
     });
 </script>

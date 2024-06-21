@@ -27,4 +27,9 @@ Route::get('contact', function () {
 Route::post('cart/add-product', [CartController::class, 'add'])->name('cart.add.product');
 
 Route::get('cart/delete-cart', [CartController::class, 'destroy'])->name('cart.destroy');
+
+Route::get('cart/delete-item-cart/{productId}', [CartController::class, 'deleteItem'])->name('cart.delete.item');
+
+Route::get('cart/add-product-to-cart/{productId}/{qty?}', [CartController::class, 'addProductItem'])
+->name('cart.add.product.item');
 ?>

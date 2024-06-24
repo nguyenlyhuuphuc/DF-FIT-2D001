@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
+use App\Mail\OrderEmailCustomer;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('home', [HomeController::class, 'index'])->name('home');
@@ -16,9 +19,8 @@ Route::get('product-detail', function () {
 
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 
-Route::get('checkout', function () {
-    return view('client.pages.checkout');
-});
+Route::get('checkout', [CartController::class, 'checkout'])->name('checkout.index')->middleware('auth');
+Route::post('checkout/place-order', [CartController::class, 'placeOrder'])->name('checkout.place-order')->middleware('auth');
 
 Route::get('contact', function () {
     return view('client.pages.contact');
@@ -37,4 +39,11 @@ Route::prefix('cart')
 
     Route::get('add-product-to-cart/{productId}/{qty?}', 'addProductItem')->name('add.product.item');
 });
+
+Route::get('test-send-mail', function(){
+    $title = 'My Title';
+
+    Mail::to('nguyenlyhuuphucwork@gmail.com')->send(new OrderEmailCustomer($title));
+});
+
 ?>

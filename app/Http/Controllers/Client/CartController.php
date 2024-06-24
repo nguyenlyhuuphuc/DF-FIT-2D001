@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderEmailAdmin;
+use App\Mail\OrderEmailCustomer;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -78,5 +84,64 @@ class CartController extends Controller
         }
 
         return response()->json(['message' => 'Cap nhat san pham thanh cong']);
+    }
+
+    public function checkout(){
+        $user = Auth::user();
+        $cart = session()->get('cart', []);
+
+        return view('client.pages.checkout', ['user' => $user, 'cart' => $cart]);
+    }
+
+    public function placeOrder(Request $request){
+        //Insert Order
+        $order = new Order();
+        $order->user_id = Auth::user()->id;
+        $order->address = $request->address;
+        $order->note = $request->note;
+        $order->status = Order::PENDING;
+        $order->total = $this->getTotalPrice();
+        $order->save(); //insert
+
+        //Insert Order Item
+        $cart = session()->get('cart', []);
+        foreach($cart as $productId => $item){
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $productId;
+            $orderItem->qty = $item['qty'];
+            $orderItem->name = $item['name'];
+            $orderItem->image = null;
+            $orderItem->price = $item['price'];
+            $orderItem->save(); //insert
+        }
+
+        //Update phone cho User
+        $user = Auth::user();
+        $user->phone = $request->phone;
+        $user->save(); //update
+
+        //Empty Session Cart
+        session()->put('cart', []);
+
+        //Send email to customer
+        Mail::to('nguyenlyhuuphucwork@gmail.com')->send(new OrderEmailCustomer($order));
+        //Send email to admin
+        Mail::to('nguyenlyhuuphucwork@gmail.com')->send(new OrderEmailAdmin($order));
+        //Minus qty in system
+
+        return redirect()->route('home')->with('message', 'Dat hang thanh cong');
+    }
+    
+    private function getTotalPrice():float {
+        $totalPrice = 0;
+
+        $cart = session()->get('cart', []);
+
+        foreach($cart as $item){
+            $totalPrice += $item['price'] * $item['qty'];
+        }
+
+        return $totalPrice;
     }
 }

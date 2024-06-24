@@ -24,12 +24,17 @@ Route::get('contact', function () {
     return view('client.pages.contact');
 });
 
-Route::post('cart/add-product', [CartController::class, 'add'])->name('cart.add.product');
+Route::prefix('cart')
+->controller(CartController::class)
+->name('cart.')
+->middleware('auth')
+->group(function(){
+    Route::post('add-product','add')->name('add.product');
 
-Route::get('cart/delete-cart', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::get('delete-cart', 'destroy')->name('destroy');
 
-Route::get('cart/delete-item-cart/{productId}', [CartController::class, 'deleteItem'])->name('cart.delete.item');
+    Route::get('delete-item-cart/{productId}', 'deleteItem')->name('delete.item');
 
-Route::get('cart/add-product-to-cart/{productId}/{qty?}', [CartController::class, 'addProductItem'])
-->name('cart.add.product.item');
+    Route::get('add-product-to-cart/{productId}/{qty?}', 'addProductItem')->name('add.product.item');
+});
 ?>

@@ -46,4 +46,6 @@ Route::get('test-send-mail', function(){
     Mail::to('nguyenlyhuuphucwork@gmail.com')->send(new OrderEmailCustomer($title));
 });
 
+Route::get('vnpay-callback', [CartController::class, 'vnpayCallBack'])->name('vnpay.callback');
+
 ?>

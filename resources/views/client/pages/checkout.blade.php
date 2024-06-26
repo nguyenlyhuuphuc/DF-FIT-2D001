@@ -79,26 +79,25 @@
                                 </ul>
                                 <div class="checkout__order__subtotal">Subtotal <span>${{ number_format($totalPrice, 2) }}</span></div>
                                 <div class="checkout__order__total">Total <span>${{ number_format($totalPrice, 2) }}</span></div>
+                                
                                 <div class="checkout__input__checkbox">
-                                    <label for="acc-or">
-                                        Create an account?
-                                        <input type="checkbox" id="acc-or">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                                    ut labore et dolore magna aliqua.</p>
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Check Payment
-                                        <input type="checkbox" id="payment">
+                                    <label for="cod">
+                                        Thanh toán truc tiep
+                                        <input type="checkbox" id="cod" name="payment_method" value="cod">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input type="checkbox" id="paypal">
+                                    <label for="VNBANK">
+                                        Thanh toán qua thẻ ATM/Tài khoản nội địa
+                                        <input type="checkbox" id="VNBANK" name="payment_method" value="VNBANK">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="checkout__input__checkbox">
+                                    <label for="INTCARD">
+                                        Thanh toán qua thẻ quốc tế
+                                        <input type="checkbox" id="INTCARD" name="payment_method" value="INTCARD">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>

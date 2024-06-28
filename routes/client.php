@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\HomeController;
 use App\Mail\OrderEmailCustomer;
 use Illuminate\Support\Facades\Auth;
@@ -47,5 +48,9 @@ Route::get('test-send-mail', function(){
 });
 
 Route::get('vnpay-callback', [CartController::class, 'vnpayCallBack'])->name('vnpay.callback');
+
+Route::get('google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
+ 
+Route::get('google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
 ?>

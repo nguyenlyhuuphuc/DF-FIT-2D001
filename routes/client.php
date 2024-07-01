@@ -3,6 +3,7 @@
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\HomeController;
+use App\Jobs\TestJob;
 use App\Mail\OrderEmailCustomer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -52,5 +53,11 @@ Route::get('vnpay-callback', [CartController::class, 'vnpayCallBack'])->name('vn
 Route::get('google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
  
 Route::get('google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+
+Route::get('queue', function (){
+    for($i = 1; $i <= 100; $i++){
+        TestJob::dispatch();
+    }
+});
 
 ?>

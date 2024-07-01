@@ -117,8 +117,9 @@
     <script src="{{ asset('asset/admin/dist/js/pages/dashboard.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('asset/admin/dist/js/demo.js') }}"></script>
-     <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
-     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     @yield('my-script')
   </body>
 </html>

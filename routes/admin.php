@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -20,6 +21,9 @@ Route::prefix('admin/product_category')
 });
 
 Route::name('admin')->resource('admin/product', ProductController::class)->middleware('check.user.admin');
+
+Route::get('admin/dashboard', [DashboardController::class, 'index'])->middleware('check.user.admin')
+->name('admin.dashboard.index');
 
 Route::get('product/pepsi', function (){
     echo '<h1>pepsi</h1>';

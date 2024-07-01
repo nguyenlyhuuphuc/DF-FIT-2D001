@@ -18,7 +18,6 @@ class GoogleController extends Controller
 
     public function callback(){
         $googleUser = Socialite::driver('google')->user();
-        dd($googleUser);
         
         $user = User::updateOrCreate(
             ['google_user_id' => $googleUser->id],
